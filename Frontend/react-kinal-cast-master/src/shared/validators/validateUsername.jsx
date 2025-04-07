@@ -5,3 +5,4 @@ export const validateUsername = (username) => {
 }
 
 export const validateUsernameMessage = 'El username debe contener entre 3 y 8 caracteres sin espacios'
+

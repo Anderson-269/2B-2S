@@ -1,22 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-const logo = "https://i.ibb.co/9h0ZZfj/Escudo-Transparente.png"
 
 export const Logo = ({text}) => {
     const logo = "https://i.ibb.co/9h0ZZfj/Escudo-Transparente.png"
-    return (
-        <div className='auth-from-logo-container'>
-            <img
-            src={logo}
-            alt="Escudo de Fundacion Kinal"
+  return (
+    <div className='auth-form-logo-container'>
+        <img 
+            src={logo} 
+            alt="Escudo de Fundación Kinal"
             style={{
                 width: '40px',
                 height: '40px'
             }}
-            />
-            <span>&nbsp;&nbsp;&nbsp;{text}</span>
-        </div>
-    )
+        />
+        <span>&nbsp;&nbsp;{text}</span>
+    </div>
+  )
 }
 
 Logo.propTypes = {

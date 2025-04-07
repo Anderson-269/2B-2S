@@ -1,64 +1,74 @@
-import React, {useState} from "react";
-import PropTypes from "prop-types"
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Input } from "./Input";
 import { Logo } from "./Logo";
-import { 
+import {
   validateEmail,
   validatePassword,
   valideEmailMessage,
   validatePasswordMessage,
 } from "../shared/validators";
+import { useLogin } from "../shared/hooks";
 
-export const Login = ({switchAuthHandler}) => {
+export const Login = ({ switchAuthHandler }) => {
+  const { login, isLoading } = useLogin();
+
   const [formState, setFormState] = useState({
-    email:{
-      value:"",
+    email: {
+      value: "",
       isValid: false,
-      showError: false
+      showError: false,
     },
-    password:{
-      value:"",
+    password: {
+      value: "",
       isValid: false,
-      showError: false
-    }
-  })
+      showError: false,
+    },
+  });
 
   const handleInputValueChange = (value, field) => {
-    setFormState((prevState) =>({
-      ...prevState,
-      [field]:{
-        ...prevState[field],
-        value
-      }
-    }))
-  }
-
-  const handleInputValidationOnBlur = (value, field) => {
-    let isValid = false
-    switch(field){
-      case "email":
-        isValid = validateEmail(value)
-        break
-      case "password":
-        isValid = validatePassword(value)
-        break
-      default :
-        break
-    }
-
     setFormState((prevState) => ({
       ...prevState,
-      [field]:{
+      [field]: {
+        ...prevState[field],
+        value,
+      },
+    }));
+  };
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+
+    login(formState.email.value, formState.password.value);
+  };
+
+  const isSubmitButtonDisabled =
+    isLoading || !formState.password.isValid || !formState.email.isValid;
+
+  const handleInputValidationOnBlur = (value, field) => {
+    let isValid = false;
+    switch (field) {
+      case "email":
+        isValid = validateEmail(value);
+        break;
+      case "password":
+        isValid = validatePassword(value);
+        break;
+      default:
+        break;
+    }
+    setFormState((prevState) => ({
+      ...prevState,
+      [field]: {
         ...prevState[field],
         isValid,
-        showError: !isValid
-      }
-    }))
-  }
-
+        showError: !isValid,
+      },
+    }));
+  };
   return (
     <div className="login-container">
-      <Logo text={"Formulario de Inicio de Sesion"}/>
+      <Logo text={"Inicio de sesión"} />
       <form className="auth-form">
         <Input
           field="email"
@@ -80,17 +90,17 @@ export const Login = ({switchAuthHandler}) => {
           showErrorMessage={formState.password.showError}
           validationMessage={validatePasswordMessage}
         />
-        <button>
-          Iniciar Sesion
+        <button onClick={handleLogin} disabled={isSubmitButtonDisabled}>
+          Iniciar sesión
         </button>
       </form>
-        <span onClick={switchAuthHandler} className="auth-form-switch-label">
-        ¿Aún no tienes una cuenta? ¡Regístrate ahora!
-        </span>
+      <span onClick={switchAuthHandler} className="auth-form-switch-label">
+        ¿Aún no tienes una cuenta?... ¡Regístrate acá!
+      </span>
     </div>
   );
 };
 
-Register.propTypes ={
-  switchAuthHandler: PropTypes.func.isRequired
-}
+Login.propTypes = {
+  switchAuthHandler: PropTypes.func.isRequired,
+};
